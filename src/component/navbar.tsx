@@ -1,15 +1,26 @@
 import React, { useState } from "react";
-import { Search, ShoppingBag, Menu, X } from "lucide-react";
+import {
+  Search,
+  // ShoppingBag,
+  Menu,
+  X,
+} from "lucide-react";
+import Cart from "./cart";
 
 const Navbar: React.FC = () => {
   const [open, setOpen] = useState(false);
+  // const [open] = useState(false);
 
   return (
     <header className="fixed top-0 inset-x-0 z-50 bg-white border-b border-gray-200">
       <nav className="w-full max-w-screen-2xl mx-auto px-10 lg:px-10 md:px-6 px-4 py-4 flex items-center justify-between">
         {/* LEFT: Logo */}
-        <div className="flex items-center gap-2">
-          <img src="images/logo.svg" alt="" />
+        <div className="flex items-center">
+          <img
+            src="/images/logo.svg"
+            alt="Logo Perusahaan"
+            className="w-24 sm:w-32 md:w-40 lg:w-48 h-auto object-contain"
+          />
         </div>
 
         {/* CENTER: Desktop Menu */}
@@ -35,10 +46,11 @@ const Navbar: React.FC = () => {
           </button>
           <button className="group relative p-2 text-gray-700 hover:text-black transition-colors duration-300">
             <span className="absolute inset-0 rounded-full bg-gray-200 scale-0 group-hover:scale-100 transition-transform duration-300 ease-out -z-10"></span>
-            <ShoppingBag size={22} strokeWidth={2} />
-            <span className="absolute top-0 right-0 bg-[#FF5733] text-white text-[10px] font-bold w-4 h-4 flex items-center justify-center rounded-full border-2 border-white">
+            {/* <ShoppingBag size={22} strokeWidth={2} /> */}
+            <Cart />
+            {/* <span className="absolute top-0 right-0 bg-[#FF5733] text-white text-[10px] font-bold w-4 h-4 flex items-center justify-center rounded-full border-2 border-white">
               3
-            </span>
+            </span> */}
           </button>
           <button
             className="group relative p-2 text-gray-800 md:hidden"

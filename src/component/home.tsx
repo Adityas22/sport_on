@@ -1,6 +1,7 @@
 import React from "react";
 import { ChevronRight } from "lucide-react";
 import { Plus } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Home: React.FC = () => {
   const categories = [
@@ -297,10 +298,12 @@ const Home: React.FC = () => {
               >
                 {/* Product Image */}
                 <div className="relative aspect-square rounded-2xl p-4 lg:p-6 bg-gradient-to-br from-pink-100 via-purple-100 to-blue-100">
-                  <button className="absolute top-3 right-3 w-10 h-10 lg:w-12 lg:h-12 rounded-lg bg-orange-500 flex items-center justify-center shadow-sm hover:bg-orange-600 transition-colors z-10">
-                    {" "}
+                  <Link
+                    to="/product/4"
+                    className="absolute top-3 right-3 w-10 h-10 lg:w-12 lg:h-12 rounded-lg bg-orange-500 flex items-center justify-center shadow-sm hover:bg-orange-600 transition-colors z-10"
+                  >
                     <Plus className="h-6 w-6 lg:h-8 lg:w-8 text-white" />
-                  </button>
+                  </Link>
                   <img
                     src={product.image}
                     alt={product.name}

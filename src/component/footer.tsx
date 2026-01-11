@@ -12,7 +12,11 @@ const Footer: React.FC = () => {
           {/* KIRI – LOGO + TEXT */}
           <div className="max-w-sm text-left">
             <div className="flex items-start gap-2 mb-4">
-              <img src="images/logo-footer.svg" alt="" />
+              <img
+                src="/images/logo-footer.svg"
+                alt="Logo Perusahaan"
+                className="w-24 sm:w-32 md:w-40 lg:w-48 h-auto object-contain"
+              />
             </div>
 
             <p className="text-sm text-white/70 leading-relaxed">
