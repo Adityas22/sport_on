@@ -38,10 +38,10 @@ export const transactionService = {
         },
       );
 
-      console.log("✅ Transaction created:", response.data);
+      console.log("Transaction created:", response.data);
       return response.data;
     } catch (error) {
-      console.error("❌ Error creating transaction:", error);
+      console.error("Error creating transaction:", error);
       throw error;
     }
   },
@@ -50,10 +50,10 @@ export const transactionService = {
   async getAll(): Promise<Transaction[]> {
     try {
       const response = await apiClient.get("/transactions");
-      console.log("✅ All transactions:", response.data);
+      console.log("All transactions:", response.data);
       return response.data;
     } catch (error) {
-      console.error("❌ Error fetching transactions:", error);
+      console.error("Error fetching transactions:", error);
       throw error;
     }
   },
@@ -61,12 +61,12 @@ export const transactionService = {
   // Get transaction by ID
   async getById(id: string): Promise<Transaction> {
     try {
-      console.log("📥 Fetching transaction:", id);
+      console.log("Fetching transaction:", id);
       const response = await apiClient.get(`/transactions/${id}`);
-      console.log("✅ Transaction fetched:", response.data);
+      console.log("Transaction fetched:", response.data);
       return response.data;
     } catch (error) {
-      console.error(`❌ Error fetching transaction ${id}:`, error);
+      console.error(`Error fetching transaction ${id}:`, error);
       throw error;
     }
   },

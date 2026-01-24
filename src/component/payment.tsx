@@ -94,7 +94,6 @@ const Payment = () => {
       <div className="max-w-6xl mx-auto px-4">
         <h1 className="text-4xl font-black text-center mb-10">Payment</h1>
 
-        {/* Info mode untuk debugging - bisa dihapus */}
         {mode === "buy_now" && (
           <div className="bg-blue-50 border border-blue-200 text-blue-700 px-4 py-2 rounded-md mb-4 text-center text-sm">
             Buy Now Payment
