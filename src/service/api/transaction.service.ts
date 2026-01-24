@@ -3,7 +3,7 @@ import apiClient from "./client";
 import {
   CreateTransactionPayload,
   Transaction,
-  TransactionItem,
+  //   TransactionItem,
 } from "../types/transaction.types";
 
 export const transactionService = {
