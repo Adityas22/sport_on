@@ -1,19 +1,73 @@
-import { useState } from "react";
-import { ShoppingCart, CheckCircle, RotateCw } from "lucide-react";
+import { useState, useEffect } from "react";
+import { ShoppingCart, CheckCircle, XCircle, RotateCw } from "lucide-react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { transactionService } from "../service/api/transaction.service";
+import { Transaction } from "../service/types/transaction.types";
 
 const OrderStatus = () => {
-  // Status bisa berupa: 'pending' atau 'success'
-  const [status, setStatus] = useState("pending");
-  const [isRefreshing, setIsRefreshing] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
+  const transactionId = location.state?.transactionId;
 
-  const handleRefresh = () => {
-    setIsRefreshing(true);
-    // Simulasi loading selama 1 detik sebelum berubah ke Success
-    setTimeout(() => {
-      setStatus("success");
-      setIsRefreshing(false);
-    }, 1000);
+  const [transaction, setTransaction] = useState<Transaction | null>(null);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  // Fetch transaction status
+  const fetchTransactionStatus = async (isRefresh = false) => {
+    if (!transactionId) {
+      navigate("/");
+      return;
+    }
+
+    try {
+      if (isRefresh) {
+        setIsRefreshing(true);
+      } else {
+        setLoading(true);
+      }
+
+      const data = await transactionService.getById(transactionId);
+      setTransaction(data);
+    } catch (error) {
+      console.error("Error fetching transaction:", error);
+      alert("Failed to fetch order status");
+    } finally {
+      if (isRefresh) {
+        setIsRefreshing(false);
+      } else {
+        setLoading(false);
+      }
+    }
   };
+
+  // Initial fetch
+  useEffect(() => {
+    fetchTransactionStatus(false);
+  }, [transactionId]);
+
+  // Handle refresh button
+  const handleRefresh = () => {
+    fetchTransactionStatus(true);
+  };
+
+  // Loading state
+  if (loading) {
+    return (
+      <section className="w-full bg-white grid place-items-center py-10 min-h-screen">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-orange-500 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Loading order status...</p>
+        </div>
+      </section>
+    );
+  }
+
+  if (!transaction) {
+    return null;
+  }
+
+  const status = transaction.status?.trim().toLowerCase();
 
   return (
     <section className="w-full bg-white grid place-items-center py-10">
@@ -45,8 +99,8 @@ const OrderStatus = () => {
                 {isRefreshing ? "Checking..." : "Refresh Order Status"}
               </button>
             </>
-          ) : (
-            /* TAMPILAN SUCCESS */
+          ) : status === "paid" ? (
+            /* TAMPILAN ACCEPTED */
             <>
               <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mb-6">
                 <CheckCircle className="text-green-600" size={40} />
@@ -58,6 +112,26 @@ const OrderStatus = () => {
                 arrive in your home. We will contact you in Whatsapp for further
                 shipping updates.
               </p>
+            </>
+          ) : (
+            /* TAMPILAN REJECTED */
+            <>
+              <div className="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mb-6">
+                <XCircle className="text-red-600" size={40} />
+              </div>
+              <h2 className="text-2xl font-bold mb-4">Payment Rejected</h2>
+              <p className="text-gray-500 mb-8 leading-relaxed">
+                We're sorry, but your payment could not be verified. This might
+                be due to an invalid payment proof or incorrect payment amount.
+                Please contact our customer service or try again with the
+                correct payment information.
+              </p>
+              <button
+                onClick={() => navigate("/")}
+                className="bg-black text-white px-8 py-3 rounded-md font-bold hover:bg-gray-800 transition-all"
+              >
+                Back to Home
+              </button>
             </>
           )}
         </div>

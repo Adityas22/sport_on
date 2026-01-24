@@ -1,139 +1,53 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { ChevronRight } from "lucide-react";
 import { Plus } from "lucide-react";
 import { Link } from "react-router-dom";
+import { categoryService } from "../service/api/category.service";
+import { Category } from "../service/types/category.types";
+import { productService } from "../service/api/product.service";
+import { Product } from "../service/types//product.types";
+import { formatPrice } from "../service/utils/price.utils";
+import { useCart } from "./cart";
+import { BASE_URL } from "../service/api/client";
 
 const Home: React.FC = () => {
-  const categories = [
-    {
-      name: "Running",
-      active: false,
-      icon: (
-        <img
-          src="/images/categories/category-running.png"
-          alt="Running"
-          className="w-10 h-10 lg:w-12 lg:h-12 object-contain"
-        />
-      ),
-    },
-    {
-      name: "Tennis",
-      active: false,
-      icon: (
-        <img
-          src="/images/categories/category-tennis.png"
-          alt="Running"
-          className="w-10 h-10 lg:w-12 lg:h-12 object-contain"
-        />
-      ),
-    },
-    {
-      name: "Basketball",
-      active: false,
-      icon: (
-        <img
-          src="/images/categories/category-basketball.png"
-          alt="Running"
-          className="w-10 h-10 lg:w-12 lg:h-12 object-contain"
-        />
-      ),
-    },
-    {
-      name: "Football",
-      active: false,
-      icon: (
-        <img
-          src="/images/categories/category-football.png"
-          alt="Running"
-          className="w-10 h-10 lg:w-12 lg:h-12 object-contain"
-        />
-      ),
-    },
-    {
-      name: "Badminton",
-      active: false,
-      icon: (
-        <img
-          src="/images/categories/category-badminton.png"
-          alt="Running"
-          className="w-10 h-10 lg:w-12 lg:h-12 object-contain"
-        />
-      ),
-    },
-    {
-      name: "Swimming",
-      active: false,
-      icon: (
-        <img
-          src="/images/categories/category-swimming.png"
-          alt="Running"
-          className="w-10 h-10 lg:w-12 lg:h-12 object-contain"
-        />
-      ),
-    },
-  ];
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+  const { addToCart } = useCart();
 
-  const products = [
-    {
-      id: 1,
-      name: "SportsOn Hyperfast Shoes",
-      category: "Running",
-      price: 329000,
-      image: "/images/products/product-3.png",
-    },
-    {
-      id: 2,
-      name: "SportsOn Rockets Tennis",
-      category: "Tennis",
-      price: 999000,
-      image: "/images/products/product-2.png",
-    },
-    {
-      id: 3,
-      name: "SportsOn Slowlivin",
-      category: "Running",
-      price: 119000,
-      image: "/images/products/product-1.png",
-    },
-    {
-      id: 4,
-      name: "SportsOn HyperSoccer v2",
-      category: "Football",
-      price: 458000,
-      image: "/images/products/product-4.png",
-    },
-    {
-      id: 5,
-      name: "SportsOn HyperSoccer v2",
-      category: "Football",
-      price: 458000,
-      image: "/images/products/product-4.png",
-    },
-    {
-      id: 6,
-      name: "SportsOn Slowlivin",
-      category: "Football",
-      price: 119000,
-      image: "/images/products/product-5.png",
-    },
-    {
-      id: 7,
-      name: "SportsOn HyperSoccer v2",
-      category: "Football",
-      price: 458000,
-      image: "/images/products/product-3.png",
-    },
-    {
-      id: 8,
-      name: "SportsOn Rockets Tennis",
-      category: "Tennis",
-      price: 999000,
-      image: "/images/products/product-2.png",
-    },
-  ];
-  const formatPrice = (price: number) => {
-    return `Rp. ${price.toLocaleString("id-ID")}`;
-  };
+  useEffect(() => {
+    // Ambil data dari API
+    const fetchData = async () => {
+      try {
+        const [cats, prods] = await Promise.all([
+          categoryService.getAll(),
+          productService.getAll(),
+        ]);
+
+        setCategories(cats);
+        setProducts(prods);
+      } catch (error) {
+        console.error("Error:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  // Tampilan loading
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-orange-500 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Memuat data...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -230,6 +144,7 @@ const Home: React.FC = () => {
           </div>
         </div>
       </section>
+      {/* categories  */}
       <section className="relative w-full bg-white pb-20 overflow-x-hidden">
         <div className="container mx-auto px-4 lg:px-8">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-10">
@@ -245,35 +160,21 @@ const Home: React.FC = () => {
             </a>
           </div>
 
-          {/* Container Grid dengan gap yang lebih rapat */}
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-5">
             {categories.map((category) => (
               <button
-                key={category.name}
-                className={`group flex flex-col items-center justify-center gap-3 p-5 rounded-3xl transition-all duration-300 transform hover:-translate-y-2 shadow-sm hover:shadow-md ${
-                  category.active
-                    ? "bg-orange-500 text-white"
-                    : "bg-[#f5f5f5] text-gray-700 hover:bg-[#ebebeb]"
-                }`}
+                key={category._id}
+                className="group flex flex-col items-center justify-center gap-3 p-5 rounded-3xl transition-all duration-300 transform hover:-translate-y-2 shadow-sm hover:shadow-md bg-[#f5f5f5] text-gray-700 hover:bg-[#ebebeb]"
               >
-                <div
-                  className={`transition-transform duration-300 group-hover:scale-110 ${
-                    category.active
-                      ? "text-white"
-                      : "text-gray-600 group-hover:text-orange-500"
-                  }`}
-                >
-                  {category.icon}
+                <div className="transition-transform duration-300 group-hover:scale-110 text-gray-600 group-hover:text-orange-500">
+                  <img
+                    src={`${BASE_URL}/${category.imageUrl}`}
+                    alt={category.name}
+                    className="w-10 h-10 lg:w-12 lg:h-12 object-contain"
+                  />
                 </div>
 
-                {/* Nama Kategori sudah di dalam Card */}
-                <span
-                  className={`text-xs lg:text-sm font-bold transition-colors ${
-                    category.active
-                      ? "text-white"
-                      : "group-hover:text-orange-500"
-                  }`}
-                >
+                <span className="text-xs lg:text-sm font-bold group-hover:text-orange-500">
                   {category.name}
                 </span>
               </button>
@@ -293,32 +194,38 @@ const Home: React.FC = () => {
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 lg:gap-6 ">
             {products.map((product) => (
               <div
-                key={product.id}
+                key={product._id}
                 className="group bg-background rounded-2xl overflow-hidden p-3 shadow-md"
               >
-                {/* Product Image */}
                 <div className="relative aspect-square rounded-2xl p-4 lg:p-6 bg-gradient-to-br from-pink-100 via-purple-100 to-blue-100">
-                  <Link
-                    to="/product/4"
+                  {/* ADD TO CART */}
+                  <button
+                    type="button"
+                    onClick={() => addToCart(product, 1)}
                     className="absolute top-3 right-3 w-10 h-10 lg:w-12 lg:h-12 rounded-lg bg-orange-500 flex items-center justify-center shadow-sm hover:bg-orange-600 transition-colors z-10"
                   >
                     <Plus className="h-6 w-6 lg:h-8 lg:w-8 text-white" />
+                  </button>
+
+                  {/* LINK KE DETAIL */}
+                  <Link to={`/product/${product._id}`}>
+                    <img
+                      src={`${BASE_URL}/${product.imageUrl}`}
+                      alt={product.name}
+                      className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
+                    />
                   </Link>
-                  <img
-                    src={product.image}
-                    alt={product.name}
-                    className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
-                  />
                 </div>
 
-                {/* Product Info */}
                 <div className="py-3 lg:py-4">
-                  <h3 className="font-semibold text-sm lg:text-base text-foreground mb-1 line-clamp-1">
-                    {product.name}
-                  </h3>
+                  <Link to={`/product/${product._id}`}>
+                    <h3 className="font-semibold text-sm lg:text-base text-foreground mb-1 line-clamp-1">
+                      {product.name}
+                    </h3>
+                  </Link>
                   <div className="flex items-center justify-between">
                     <p className="text-xs lg:text-sm text-muted-foreground">
-                      {product.category}
+                      {product.category.name}
                     </p>
                     <span className="text-sm lg:text-base font-semibold text-primary">
                       {formatPrice(product.price)}

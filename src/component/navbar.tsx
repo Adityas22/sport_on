@@ -6,6 +6,7 @@ import {
   X,
 } from "lucide-react";
 import Cart from "./cart";
+import { Link } from "react-router-dom";
 
 const Navbar: React.FC = () => {
   const [open, setOpen] = useState(false);
@@ -16,22 +17,28 @@ const Navbar: React.FC = () => {
       <nav className="w-full max-w-screen-2xl mx-auto px-10 lg:px-10 md:px-6 px-4 py-4 flex items-center justify-between">
         {/* LEFT: Logo */}
         <div className="flex items-center">
-          <img
-            src="/images/logo.svg"
-            alt="Logo Perusahaan"
-            className="w-24 sm:w-32 md:w-40 lg:w-48 h-auto object-contain"
-          />
+          <Link to="/">
+            <img
+              src="/images/logo.svg"
+              alt="Logo Perusahaan"
+              className="w-24 sm:w-32 md:w-40 lg:w-48 h-auto object-contain cursor-pointer"
+            />
+          </Link>
         </div>
 
         {/* CENTER: Desktop Menu */}
         <ul className="hidden md:flex items-center gap-12 text-sm font-semibold text-gray-800">
-          <li className="relative cursor-pointer group">
-            Home
-            <span className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-6 h-[3px] bg-[#FF5733] rounded-full"></span>
+          <li className="relative group">
+            <Link to="/" className="cursor-pointer">
+              Home
+              <span className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-6 h-[3px] bg-[#FF5733] rounded-full"></span>
+            </Link>
           </li>
+
           <li className="cursor-pointer hover:text-[#FF5733] transition-colors">
             Category
           </li>
+
           <li className="cursor-pointer hover:text-[#FF5733] transition-colors">
             Explore Products
           </li>
@@ -44,14 +51,10 @@ const Navbar: React.FC = () => {
             <span className="absolute inset-0 rounded-full bg-gray-200 scale-0 group-hover:scale-100 transition-transform duration-300 ease-out -z-10"></span>
             <Search size={22} strokeWidth={2} />
           </button>
-          <button className="group relative p-2 text-gray-700 hover:text-black transition-colors duration-300">
+          <div className="group relative p-2 text-gray-700 hover:text-black transition-colors duration-300">
             <span className="absolute inset-0 rounded-full bg-gray-200 scale-0 group-hover:scale-100 transition-transform duration-300 ease-out -z-10"></span>
-            {/* <ShoppingBag size={22} strokeWidth={2} /> */}
             <Cart />
-            {/* <span className="absolute top-0 right-0 bg-[#FF5733] text-white text-[10px] font-bold w-4 h-4 flex items-center justify-center rounded-full border-2 border-white">
-              3
-            </span> */}
-          </button>
+          </div>
           <button
             className="group relative p-2 text-gray-800 md:hidden"
             onClick={() => setOpen(!open)}
