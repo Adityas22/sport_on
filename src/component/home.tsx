@@ -225,7 +225,8 @@ const Home: React.FC = () => {
                   </Link>
                   <div className="flex items-center justify-between">
                     <p className="text-xs lg:text-sm text-muted-foreground">
-                      {product.category.name}
+                      {/* {product.category.name} */}
+                      {product.category?.name ?? "Tanpa Kategori"}
                     </p>
                     <span className="text-sm lg:text-base font-semibold text-primary">
                       {formatPrice(product.price)}
