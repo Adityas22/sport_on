@@ -19,7 +19,7 @@ function App() {
   return (
     <Router>
       <Routes>
-        {/* GROUP 1: CUSTOMER ROUTES (Pake Navbar & Footer) */}
+        {/* GROUP 1: CUSTOMER ROUTES */}
         <Route element={<UserLayout />}>
           <Route path="/" element={<Home />} />
           <Route path="/product/:id" element={<ProductDetail />} />
@@ -28,16 +28,18 @@ function App() {
           <Route path="/order-status" element={<OrderStatus />} />
         </Route>
 
-        {/* GROUP 2: ADMIN ROUTES (Pake Sidebar, Tanpa Footer) */}
-        <Route path="/admin" element={<AdminLayout />}>
-          <Route index element={<ProductManagement />} />{" "}
-          <Route path="products" element={<ProductManagement />} />{" "}
-          <Route path="categories" element={<CategoryManagement />} />
-          <Route path="transactions" element={<TransactionManagement />} />
-          <Route path="bank" element={<BankManagement />} />
+        {/* GROUP 2: ADMIN ROUTES */}
+        <Route path="/admin">
+          <Route path="login" element={<Login />} />
+          {/*AdminLayout */}
+          <Route element={<AdminLayout />}>
+            <Route index element={<ProductManagement />} />
+            <Route path="products" element={<ProductManagement />} />
+            <Route path="categories" element={<CategoryManagement />} />
+            <Route path="transactions" element={<TransactionManagement />} />
+            <Route path="bank" element={<BankManagement />} />
+          </Route>
         </Route>
-
-        <Route path="/login" element={<Login />} />
       </Routes>
     </Router>
   );
