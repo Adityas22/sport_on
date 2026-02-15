@@ -1,15 +1,20 @@
-export interface TransactionItem {
-  productId: string;
-  qty: number;
+// Product bisa berupa object lengkap atau hanya string ID
+export interface ProductInTransaction {
+  _id: string;
+  name: string;
+  description?: string;
+  category?: string;
+  stock?: number;
+  price?: number;
+  imageUrl?: string;
+  createdAt?: string;
+  updatedAt?: string;
+  __v?: number;
 }
 
-export interface CreateTransactionPayload {
-  paymentProof: File;
-  purchasedItems: TransactionItem[];
-  totalPayment: number;
-  customerName: string;
-  customerContact: string;
-  customerAddress: string;
+export interface TransactionItem {
+  productId: string | ProductInTransaction; // Bisa string atau object
+  qty: number;
 }
 
 export interface Transaction {
@@ -23,4 +28,16 @@ export interface Transaction {
   customerAddress: string;
   createdAt: string;
   updatedAt: string;
+}
+
+export interface CreateTransactionPayload {
+  paymentProof: File;
+  purchasedItems: Array<{
+    productId: string;
+    qty: number;
+  }>;
+  totalPayment: number;
+  customerName: string;
+  customerContact: string;
+  customerAddress: string;
 }

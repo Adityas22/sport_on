@@ -70,4 +70,35 @@ export const transactionService = {
       throw error;
     }
   },
+
+  // Update transaction status (untuk approve/reject)
+  async updateStatus(id: string, status: string): Promise<Transaction> {
+    try {
+      const formData = new FormData();
+      formData.append("status", status);
+
+      const response = await apiClient.put(`/transactions/${id}`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      console.log("Transaction status updated:", response.data);
+      return response.data;
+    } catch (error) {
+      console.error(`Error updating transaction ${id}:`, error);
+      throw error;
+    }
+  },
+
+  // Delete transaction
+  async delete(id: string): Promise<void> {
+    try {
+      await apiClient.delete(`/transactions/${id}`);
+      console.log(`Transaction ${id} deleted successfully`);
+    } catch (error) {
+      console.error(`Error deleting transaction ${id}:`, error);
+      throw error;
+    }
+  },
 };

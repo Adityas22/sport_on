@@ -1,6 +1,8 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Box, Layers, ShoppingCart, CreditCard, LogOut } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import authService from "../../../service/api/auth.service";
 
 const Sidebar: React.FC = () => {
   const location = useLocation();
@@ -27,6 +29,16 @@ const Sidebar: React.FC = () => {
     },
   ];
 
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    // Konfirmasi logout (opsional)
+    if (window.confirm("Are you sure you want to logout?")) {
+      authService.logout();
+      navigate("/admin/login"); // Redirect ke halaman login
+    }
+  };
+
   return (
     <aside className="w-64 h-screen bg-white border-r border-gray-100 flex flex-col fixed left-0 top-0">
       {/* LOGO SECTION */}
@@ -40,7 +52,6 @@ const Sidebar: React.FC = () => {
           />
         </div>
       </div>
-
       {/* NAVIGATION LINKS */}
       <nav className="flex-1 px-4 space-y-2">
         {menuItems.map((item) => (
@@ -58,11 +69,10 @@ const Sidebar: React.FC = () => {
           </Link>
         ))}
       </nav>
-
-      {/* LOGOUT BUTTON */}
+      {/* Button logout */}
       <div className="p-6 border-t border-gray-50">
         <button
-          onClick={() => console.log("Logout logic here")}
+          onClick={handleLogout}
           className="flex items-center gap-4 px-4 py-2 w-full text-gray-500 hover:text-red-600 transition-colors"
         >
           <LogOut size={20} />

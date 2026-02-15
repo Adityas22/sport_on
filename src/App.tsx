@@ -14,6 +14,7 @@ import TransactionManagement from "./feeature/admin/page/transactionManagement";
 import BankManagement from "./feeature/admin/page/bankManagement";
 
 import Login from "./feeature/auth/page/login";
+import ProtectedRoute from "./feeature/admin/component/ProtectedRoute";
 
 function App() {
   return (
@@ -29,10 +30,12 @@ function App() {
         </Route>
 
         {/* GROUP 2: ADMIN ROUTES */}
-        <Route path="/admin">
-          <Route path="login" element={<Login />} />
-          {/*AdminLayout */}
-          <Route element={<AdminLayout />}>
+        {/* PUBLIC ROUTES */}
+        <Route path="/admin/login" element={<Login />} />
+
+        {/* PROTECTED ROUTES */}
+        <Route element={<ProtectedRoute />}>
+          <Route path="/admin" element={<AdminLayout />}>
             <Route index element={<ProductManagement />} />
             <Route path="products" element={<ProductManagement />} />
             <Route path="categories" element={<CategoryManagement />} />
