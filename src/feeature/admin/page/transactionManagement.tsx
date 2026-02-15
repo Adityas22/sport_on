@@ -256,19 +256,18 @@ const TransactionManagement: React.FC = () => {
                   </p>
                   <div className="space-y-2">
                     {selectedTxn.purchasedItems.map((item, idx) => {
-                      // Check apakah productId adalah object atau string
-                      const isProductObject =
-                        typeof item.productId === "object" &&
-                        item.productId !== null;
-                      const productId = isProductObject
-                        ? item.productId._id
-                        : item.productId;
-                      const productName = isProductObject
-                        ? item.productId.name
+                      // Cast untuk menghindari TypeScript error
+                      const product = item.productId as any;
+                      const isObject =
+                        product && typeof product === "object" && product._id;
+
+                      const productId = isObject
+                        ? product._id
+                        : String(product);
+                      const productName = isObject
+                        ? product.name
                         : "Unknown Product";
-                      const productImage = isProductObject
-                        ? item.productId.imageUrl
-                        : null;
+                      const productImage = isObject ? product.imageUrl : null;
 
                       return (
                         <div
